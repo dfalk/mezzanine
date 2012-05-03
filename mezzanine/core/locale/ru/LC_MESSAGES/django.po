@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mezzanine\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-04-25 01:17+0400\n"
+"POT-Creation-Date: 2012-05-03 15:52+0400\n"
 "PO-Revision-Date: 2012-03-11 23:55+0000\n"
 "Last-Translator: Sebastián Ramírez Magrí <sebasmagri@gmail.com>\n"
 "Language-Team: Russian (http://www.transifex.net/projects/p/mezzanine/"
@@ -242,7 +242,7 @@ msgstr "Отмена"
 
 #: templates/includes/editable_form.html:25
 msgid "Edit"
-msgstr "Редактировать"
+msgstr "Ред."
 
 #: templates/includes/editable_toolbar.html:11
 msgid "Log out"
