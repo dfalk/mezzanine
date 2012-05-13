@@ -6,6 +6,7 @@ from urllib import urlopen, urlencode, unquote
 
 from django.contrib import admin
 from django.contrib.auth import REDIRECT_FIELD_NAME
+from django.contrib.sites.models import Site
 from django.core.files import File
 from django.core.files.storage import default_storage
 from django.core.urlresolvers import reverse, NoReverseMatch
@@ -24,12 +25,24 @@ from mezzanine.core.fields import RichTextField
 from mezzanine.core.forms import get_edit_form
 from mezzanine.utils.html import decode_entities
 from mezzanine.utils.importing import import_dotted_path
-from mezzanine.utils.views import is_editable
+from mezzanine.utils.sites import current_site_id
 from mezzanine.utils.urls import admin_url
+from mezzanine.utils.views import is_editable
 from mezzanine import template
 
 
 register = template.Library()
+
+
+if "compressor" in settings.INSTALLED_APPS:
+    @register.tag
+    def compress(parser, token):
+        from compressor.templatetags.compress import compress
+        return compress(parser, token)
+else:
+    @register.to_end_tag
+    def compress(parsed, context, token):
+        return parsed
 
 
 @register.inclusion_tag("includes/form_fields.html", takes_context=True)
@@ -58,11 +71,13 @@ def ifinstalled(parser, token):
     """
     Old-style ``if`` tag that renders contents if the given app is
     installed. The main use case is:
+
     {% ifinstalled app_name %}
-        {% include "app_name/template.html" %}
+    {% include "app_name/template.html" %}
     {% endifinstalled %}
+
     so we need to manually pull out all tokens if the app isn't
-    installed, since if we used a normal ``if``tag with a False arg,
+    installed, since if we used a normal ``if`` tag with a False arg,
     the include tag will still try and find the template to include.
     """
     try:
@@ -145,7 +160,7 @@ def pagination_for(context, current_page):
 
 
 @register.simple_tag
-def thumbnail(image_url, width, height):
+def thumbnail(image_url, width, height, quality=95):
     """
     Given the URL to an image, resizes the image using the given width and
     height on the first time it is requested, and returns the URL to the new
@@ -167,8 +182,10 @@ def thumbnail(image_url, width, height):
     if not os.path.exists(thumb_dir):
         os.makedirs(thumb_dir)
     thumb_path = os.path.join(thumb_dir, thumb_name)
-    thumb_url = "%s/%s/%s" % (os.path.dirname(image_url),
-                              settings.THUMBNAILS_DIR_NAME, thumb_name)
+    thumb_url = "%s/%s" % (settings.THUMBNAILS_DIR_NAME, thumb_name)
+    image_url_path = os.path.dirname(image_url)
+    if image_url_path:
+        thumb_url = "%s/%s" % (image_url_path, thumb_url)
 
     try:
         thumb_exists = os.path.exists(thumb_path)
@@ -201,7 +218,7 @@ def thumbnail(image_url, width, height):
         image = image.convert("RGB")
     try:
         image = ImageOps.fit(image, (width, height), Image.ANTIALIAS)
-        image = image.save(thumb_path, filetype, quality=100)
+        image = image.save(thumb_path, filetype, quality=quality)
         # Push a remote copy of the thumbnail if MEDIA_URL is
         # absolute.
         if "://" in settings.MEDIA_URL:
@@ -381,6 +398,8 @@ def admin_dropdown_menu(context):
     Renders the app list for the admin dropdown menu navigation.
     """
     context["dropdown_menu_app_list"] = admin_app_list(context["request"])
+    context["dropdown_menu_sites"] = list(Site.objects.all())
+    context["dropdown_menu_selected_site_id"] = current_site_id()
     return context
 
 

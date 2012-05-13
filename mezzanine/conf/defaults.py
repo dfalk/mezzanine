@@ -17,10 +17,24 @@ from mezzanine.conf import register_setting
 
 
 register_setting(
+    name="ACCOUNTS_MIN_PASSWORD_LENGTH",
+    description=_("Minimum length for passwords"),
+    editable=False,
+    default=6,
+)
+
+register_setting(
+    name="ACCOUNTS_PROFILE_FORM_EXCLUDE_FIELDS",
+    description=_("List of fields to exclude from the profile form."),
+    editable=False,
+    default=(),
+)
+
+register_setting(
     name="ACCOUNTS_VERIFICATION_REQUIRED",
-    description="If ``True``, when users create an account, they will be "
+    description=_("If ``True``, when users create an account, they will be "
         "sent an email with a verification link, which they must click to "
-        "enable their account.",
+        "enable their account."),
     editable=False,
     default=False,
 )
@@ -349,11 +363,77 @@ register_setting(
 )
 
 register_setting(
+    name="RICHTEXT_ALLOWED_TAGS",
+    description=_("List of HTML tags that won't be stripped from "
+        "``RichTextField`` instances."),
+    editable=False,
+    default=("a", "abbr", "acronym", "address", "area", "b", "bdo", "big",
+        "blockquote", "br", "button", "caption", "center", "cite", "code",
+        "col", "colgroup", "dd", "del", "dfn", "dir", "div", "dl", "dt",
+        "em", "fieldset", "font", "form", "h1", "h2", "h3", "h4", "h5",
+        "h6", "hr", "i", "img", "input", "ins", "kbd", "label", "legend",
+        "li", "map", "menu", "ol", "optgroup", "option", "p", "pre", "q",
+        "s", "samp", "select", "small", "span", "strike", "strong", "sub",
+        "sup", "table", "tbody", "td", "textarea", "tfoot", "th", "thead",
+        "tr", "tt", "u", "ul", "var", "wbr"),
+)
+
+register_setting(
+    name="RICHTEXT_ALLOWED_ATTRIBUTES",
+    description=_("List of HTML attributes that won't be stripped from "
+        "``RichTextField`` instances."),
+    editable=False,
+    default=("abbr", "accept", "accept-charset", "accesskey", "action",
+        "align", "alt", "axis", "border", "cellpadding", "cellspacing",
+        "char", "charoff", "charset", "checked", "cite", "class", "clear",
+        "cols", "colspan", "color", "compact", "coords", "datetime", "dir",
+        "disabled", "enctype", "for", "frame", "headers", "height", "href",
+        "hreflang", "hspace", "id", "ismap", "label", "lang", "longdesc",
+        "maxlength", "media", "method", "multiple", "name", "nohref",
+        "noshade", "nowrap", "prompt", "readonly", "rel", "rev", "rows",
+        "rowspan", "rules", "scope", "selected", "shape", "size", "span",
+        "src", "start", "style", "summary", "tabindex", "target", "title",
+        "type", "usemap", "valign", "value", "vspace", "width", "xml:lang"),
+)
+
+register_setting(
     name="RICHTEXT_FILTER",
     description=_("Dotted path to the function to call on a ``RichTextField`` "
         "value before it is rendered to the template."),
     editable=False,
     default=None,
+)
+
+RICHTEXT_FILTER_LEVEL_HIGH = 1
+RICHTEXT_FILTER_LEVEL_LOW = 2
+RICHTEXT_FILTER_LEVEL_NONE = 3
+RICHTEXT_FILTER_LEVELS = (
+    (RICHTEXT_FILTER_LEVEL_HIGH, _("High")),
+    (RICHTEXT_FILTER_LEVEL_LOW, _("Low (allows video, iframe, Flash, etc)")),
+    (RICHTEXT_FILTER_LEVEL_NONE, _("No filtering")),
+)
+
+register_setting(
+    name="RICHTEXT_FILTER_LEVEL",
+    description="*Do not change this setting unless you know what you're "
+        "doing.*\n\nWhen content is saved in a Rich Text (WYSIWYG) field, "
+        "unsafe HTML tags and attributes are stripped from the content to "
+        "protect against staff members intentionally adding code that could "
+        "be used to cause problems, such as changing their account to "
+        "a super-user with full access to the system.\n\n"
+        "This setting allows you to change the level of filtering that "
+        "occurs. Setting it to low will allow certain extra tags to be "
+        "permitted, such as those required for embedding video. While these "
+        "tags are not the main candidates for users adding malicious code, "
+        "they are still considered dangerous and could potentially be "
+        "mis-used by a particularly technical user, and so are filtered out "
+        "when the filtering level is set to high.\n\n"
+        "Setting the filtering level to no filtering, will disable all "
+        "filtering, and allow any code to be entered by staff members, "
+        "including script tags.",
+    editable=True,
+    choices=RICHTEXT_FILTER_LEVELS,
+    default=RICHTEXT_FILTER_LEVEL_HIGH,
 )
 
 register_setting(
