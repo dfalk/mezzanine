@@ -176,7 +176,7 @@ msgstr "читать далее"
 
 #: templates/admin/index.html:17 templates/admin/includes/dropdown_menu.html:3
 msgid "Dashboard"
-msgstr "Административная панель"
+msgstr "Панель управления"
 
 #: templates/admin/login.html:25
 msgid "Username or email:"
