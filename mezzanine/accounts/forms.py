@@ -44,6 +44,7 @@ class LoginForm(Html5Mixin, forms.Form):
 # ``ProfileForm``.
 Profile = get_profile_model()
 _exclude_fields = tuple(settings.ACCOUNTS_PROFILE_FORM_EXCLUDE_FIELDS)
+_exclude_update_user_fields = tuple(settings.ACCOUNTS_UPDATE_USER_FORM_EXCLUDE_FIELDS)
 if Profile is not None:
     class ProfileFieldsForm(forms.ModelForm):
         class Meta:
@@ -74,6 +75,9 @@ class ProfileForm(Html5Mixin, forms.ModelForm):
         user_fields = User._meta.get_all_field_names()
         self.fields["username"].help_text = _(
                         "Only letters, numbers, dashes or underscores please")
+        if not self._signup:
+            for field in _exclude_update_user_fields:
+                del self.fields[field]
         for field in self.fields:
             # Make user fields required.
             if field in user_fields:
@@ -149,17 +153,12 @@ class ProfileForm(Html5Mixin, forms.ModelForm):
         Create the new user using their email address as their username.
         """
         user = super(ProfileForm, self).save(*args, **kwargs)
-        password = self.cleaned_data["password1"]
-        if password:
-            user.set_password(password)
-            user.save()
-
-        # Save profile model.
-        if self._has_profile:
-            profile = user.get_profile()
-            ProfileFieldsForm(self.cleaned_data, instance=profile).save()
-
         if self._signup:
+            password = self.cleaned_data["password1"]
+            if password:
+                user.set_password(password)
+                user.save()
+
             settings.use_editable()
             if settings.ACCOUNTS_VERIFICATION_REQUIRED:
                 user.is_active = False
@@ -167,6 +166,12 @@ class ProfileForm(Html5Mixin, forms.ModelForm):
             else:
                 user = authenticate(username=user.username,
                                     password=password, is_active=True)
+
+        # Save profile model.
+        if self._has_profile:
+            profile = user.get_profile()
+            ProfileFieldsForm(self.cleaned_data, instance=profile).save()
+
         return user
 
 
