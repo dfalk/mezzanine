@@ -31,6 +31,13 @@ register_setting(
 )
 
 register_setting(
+    name="ACCOUNTS_UPDATE_USER_FORM_EXCLUDE_FIELDS",
+    description=_("List of the User model fields to exclude from the update form."),
+    editable=False,
+    default=("username","email","password1","password2",),
+)
+
+register_setting(
     name="ACCOUNTS_VERIFICATION_REQUIRED",
     description=_("If ``True``, when users create an account, they will be "
         "sent an email with a verification link, which they must click to "
