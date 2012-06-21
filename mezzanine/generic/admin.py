@@ -28,5 +28,5 @@ class ThreadedCommentAdmin(CommentsAdmin):
         return actions
 
 
-if not settings.COMMENTS_DISQUS_SHORTNAME:
+if settings.USE_MEZZANINE_COMMENTS and not settings.COMMENTS_DISQUS_SHORTNAME:
     admin.site.register(ThreadedComment, ThreadedCommentAdmin)

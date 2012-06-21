@@ -4,14 +4,17 @@ related to any other model using generic relationshipswith Django's
 contenttypes framework, such as comments, keywords/tags and voting.
 """
 
+from mezzanine.conf import settings
+
 # These methods are part of the API for django.contrib.comments
 
 
-def get_model():
-    from mezzanine.generic.models import ThreadedComment
-    return ThreadedComment
+if settings.USE_MEZZANINE_COMMENTS:
 
+    def get_model():
+        from mezzanine.generic.models import ThreadedComment
+        return ThreadedComment
 
-def get_form():
-    from mezzanine.generic.forms import ThreadedCommentForm
-    return ThreadedCommentForm
+    def get_form():
+        from mezzanine.generic.forms import ThreadedCommentForm
+        return ThreadedCommentForm

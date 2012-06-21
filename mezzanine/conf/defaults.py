@@ -663,3 +663,11 @@ register_setting(
     editable=False,
     default=True,
 )
+
+register_setting(
+    name="USE_MEZZANINE_COMMENTS",
+    description=_("If ``True``, the generic comments application will be "
+        "activated."),
+    editable=False,
+    default=True,
+)
