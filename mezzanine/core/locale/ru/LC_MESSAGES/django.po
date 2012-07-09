@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mezzanine\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-07-09 12:24+0400\n"
+"POT-Creation-Date: 2012-07-09 14:20+0400\n"
 "PO-Revision-Date: 2012-06-17 15:39+0000\n"
 "Last-Translator: Sebastián Ramírez Magrí <sebasmagri@gmail.com>\n"
 "Language-Team: Russian (http://www.transifex.net/projects/p/mezzanine/"
@@ -26,7 +26,7 @@ msgstr ""
 msgid "Meta data"
 msgstr "Метаданные"
 
-#: admin.py:50
+#: admin.py:51
 msgid "This field is required if status is set to published."
 msgstr "Это поле обязательное, если статус установлен в Опубликовано."
 
@@ -34,7 +34,7 @@ msgstr "Это поле обязательное, если статус уста
 msgid "Controls the ordering and grouping of the admin menu."
 msgstr ""
 
-#: defaults.py:24 models.py:220
+#: defaults.py:24 models.py:224
 msgid "Content"
 msgstr "Содержимое"
 
@@ -142,8 +142,7 @@ msgstr "Максимальное количество ссылок в пагин
 #: defaults.py:169
 msgid "Max number of paging links to display when paginating."
 msgstr ""
-"Максимальное количество ссылок на страницы, отображаемых в области "
-"пагинации."
+"Максимальное количество ссылок на страницы, отображаемых в области пагинации."
 
 #: defaults.py:176
 msgid ""
@@ -242,22 +241,20 @@ msgid ""
 msgstr ""
 "*Не изменяйте этот параметр, если вы не знаете что он делает.*\n"
 "\n"
-"Когда содержимое Rich Text (WYSIWYG) поля сохраняется в базу, "
-"небезопасные HTML теги и атрибуты исключаются из текста для защиты от "
-"намеренного добавления редакторами сайта кода, который может привести к "
-"смене типа их учетной записи на супер-пользователя с полным доступом к "
-"системе.\n"
+"Когда содержимое Rich Text (WYSIWYG) поля сохраняется в базу, небезопасные "
+"HTML теги и атрибуты исключаются из текста для защиты от намеренного "
+"добавления редакторами сайта кода, который может привести к смене типа их "
+"учетной записи на супер-пользователя с полным доступом к системе.\n"
 "\n"
 "Этот параметр позволяет изменить уровень фильтрации HTML тегов. Установка "
 "параметра в ``Низкий`` разрешает добавлять некоторые дополнительные теги, "
-"которые требуются для вставки видео. Хотя они и не являются опасными, все "
-"же могут быть косвенно использованы технически грамотными пользователями. "
+"которые требуются для вставки видео. Хотя они и не являются опасными, все же "
+"могут быть косвенно использованы технически грамотными пользователями. "
 "Поэтому даже эти теги фильтруются, если выставлен ``Высокий`` уровень "
 "фильтрации.\n"
 "\n"
 "Установка параметра в состояние ``Без фильтра`` отключает фильтрацию, что "
-"позволяет редакторам сайт добавлять любой HTML код, включая скриптовые "
-"теги."
+"позволяет редакторам сайт добавлять любой HTML код, включая скриптовые теги."
 
 #: defaults.py:296
 msgid "Search results per page"
@@ -285,8 +282,8 @@ msgid ""
 "content of the HTML title tags on every page."
 msgstr ""
 "Заголовок, отображаемый как название вкладки браузера (или название окна "
-"браузера), состоит из заголовка отображаемой страницы с добавлением "
-"данной части."
+"браузера), состоит из заголовка отображаемой страницы с добавлением данной "
+"части."
 
 #: defaults.py:324
 msgid "Tagline"
@@ -317,8 +314,8 @@ msgid ""
 "If ``True``, users will be automatically redirected to HTTPS for the URLs "
 "specified by the ``SSL_FORCE_URL_PREFIXES`` setting."
 msgstr ""
-"Если ``Да``, то пользователи будут автоматически перенаправлены на HTTPS "
-"для ссылок, которые указаны в настройке ``SSL_FORCE_URL_PREFIXES``."
+"Если ``Да``, то пользователи будут автоматически перенаправлены на HTTPS для "
+"ссылок, которые указаны в настройке ``SSL_FORCE_URL_PREFIXES``."
 
 #: defaults.py:353
 msgid "Force Host"
@@ -328,8 +325,7 @@ msgstr "Установить хост"
 msgid ""
 "Host name that the site should always be accessed via that matches the SSL "
 "certificate."
-msgstr ""
-"Имя хоста, которое сайт будет использовать для SSL-сертификата."
+msgstr "Имя хоста, которое сайт будет использовать для SSL-сертификата."
 
 #: defaults.py:372
 msgid "List of words which will be stripped from search queries."
@@ -371,7 +367,7 @@ msgstr ""
 msgid "Could not import the value of settings.RICHTEXT_WIDGET_CLASS: %s"
 msgstr ""
 
-#: forms.py:75 models.py:262
+#: forms.py:75 models.py:266
 msgid "Order"
 msgstr "Порядок"
 
@@ -388,52 +384,65 @@ msgid "View on site"
 msgstr "Посмотреть на сайте"
 
 #: models.py:106
+msgid "Html title"
+msgstr "Html заголовок"
+
+#: models.py:107
+msgid "Add suffix with site title"
+msgstr "Добавить окончание с названием сайта"
+
+#: models.py:108
+msgid "If checked, site title will be added to the end of html title tag."
+msgstr "Если отмечено, то название сайта будет добавлено в конец "
+"html заголовка. Пример: Страница | Имя сайта"
+
+#: models.py:110
 msgid "Description"
 msgstr "Описание"
 
-#: models.py:107
+#: models.py:111
 msgid "Generate description"
 msgstr "Генерировать описание"
 
-#: models.py:108
+#: models.py:112
 msgid ""
 "If checked, the description will be automatically generated from content. "
 "Uncheck if you want to manually set a custom description."
 msgstr "Если отметить, то описание будет генерироваться автоматически."
 
-#: models.py:111
+#: models.py:115
 msgid "Keywords"
 msgstr "Ключевые слова"
 
-#: models.py:158
+#: models.py:162
 msgid "Draft"
 msgstr "Черновик"
 
-#: models.py:159
+#: models.py:163
 msgid "Published"
 msgstr "Опубликовано"
 
-#: models.py:170
+#: models.py:174
 msgid "Status"
 msgstr "Статус"
 
-#: models.py:172 models.py:201
+#: models.py:176 models.py:205
 msgid "Published from"
 msgstr "Опубликовано с"
 
-#: models.py:173
+#: models.py:177
 msgid "With published checked, won't be shown until this time"
 msgstr "Не будет показано до этого времени"
 
-#: models.py:175
+#: models.py:179
 msgid "Expires on"
 msgstr "Истекает"
 
-#: models.py:176
+#: models.py:180
 msgid "With published checked, won't be shown after this time"
 msgstr "Не будет показано после этого времени"
 
-#: models.py:316
+#: models.py:320
 msgid "Author"
 msgstr "Автор"
 
