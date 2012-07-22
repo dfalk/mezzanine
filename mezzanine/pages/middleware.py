@@ -1,4 +1,6 @@
+
 from django.contrib.auth import REDIRECT_FIELD_NAME
+from django.core.urlresolvers import resolve
 from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.utils.http import urlquote
@@ -35,6 +37,10 @@ class PageMiddleware(object):
 
         slug = path_to_slug(request.path_info)
         if slug == "/":
+            try:
+                slug = resolve('/').kwargs['slug']
+            except KeyError:
+                pass
             slugs = [slug]
         else:
             # Create a list containing this slug, plus each of the
@@ -83,7 +89,7 @@ class PageMiddleware(object):
         # Run page processors.
         model_processors = page_processors.processors[page.content_model]
         slug_processors = page_processors.processors["slug:%s" % page.slug]
-        for (processor, exact_page) in model_processors + slug_processors:
+        for (processor, exact_page) in slug_processors + model_processors:
             if exact_page and not page.is_current:
                 continue
             processor_response = processor(request, page)

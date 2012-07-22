@@ -1,4 +1,6 @@
 
+import os
+
 from django.template import Template, TemplateSyntaxError, TemplateDoesNotExist
 from django.template.loader_tags import ExtendsNode
 from django.template.loader import find_template_loader
@@ -32,7 +34,7 @@ class OverExtendsNode(ExtendsNode):
     should also theoretically work.
     """
 
-    def find_template(self, name, context):
+    def find_template(self, name, context, peeking=False):
         """
         Replacement for Django's ``find_template`` that uses the current
         template context to keep track of which template directories it
@@ -54,7 +56,9 @@ class OverExtendsNode(ExtendsNode):
         if context_name not in context:
             context[context_name] = {}
         if name not in context[context_name]:
-            all_dirs = list(settings.TEMPLATE_DIRS + app_template_dirs)
+            # os.path.abspath is needed under uWSGI
+            all_dirs = list(settings.TEMPLATE_DIRS) + \
+                       map(os.path.abspath, app_template_dirs)
             context[context_name][name] = all_dirs
 
         # Build a list of template loaders to use. For loaders that wrap
@@ -76,7 +80,11 @@ class OverExtendsNode(ExtendsNode):
             except TemplateDoesNotExist:
                 pass
             else:
-                context[context_name][name].remove(path[:-len(name) - 1])
+                # Only remove the absolute path for the initial call in
+                # get_parent, and not when we're peeking during the
+                # second call.
+                if not peeking:
+                    context[context_name][name].remove(path[:-len(name) - 1])
                 return Template(source)
         raise TemplateDoesNotExist(name)
 
@@ -96,7 +104,7 @@ class OverExtendsNode(ExtendsNode):
         template = self.find_template(parent, context)
         if (isinstance(template.nodelist[0], ExtendsNode) and
             template.nodelist[0].parent_name.resolve(context) == parent):
-            return self.find_template(parent, context)
+            return self.find_template(parent, context, peeking=True)
         return template
 
 
